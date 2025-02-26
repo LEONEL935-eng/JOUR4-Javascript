@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #letter {
+            font-size: 48px;
+            margin: 20px;
+        }
+
+        #score {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Typing Game - Niveau Facile</h1>
+    <div id="letter"></div>
+    <div id="score">Score : 0</div>
+    <script>
+        let score = 0;
+        const letterDisplay = document.getElementById('letter');
+        const scoreDisplay = document.getElementById('score');
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        function generateRandomLetter() {
+            return letters[Math.floor(Math.random() * letters.length)];
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                letterDisplay.textContent = generateRandomLetter();
+            }
+
+            if (event.key.toUpperCase() === letterDisplay.textContent) {
+                score++;
+                scoreDisplay.textContent = "score :" + score;
+                letterDisplay.textContent = generateRandomLetter();
+            }
+        });
+    </script>
+</body>
+</html>
