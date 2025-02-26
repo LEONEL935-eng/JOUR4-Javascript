@@ -29,12 +29,19 @@
             "world",
             undefined
         ]
+        //comparaison si les valeurs du tableau sont des chaines de charactère
+
         for (let i = 0; i< tableau.length; i++){
             console.log(tableau[i])
             console.log(typeof tableau[i])
+            if (typeof tableau[i] === "string"){
+                console.log("it is string")
+            } else{
+                console.log("it is no string")
+            }
 
         }
-        if (1===1){
+        if (1 === 1){
             console.log("ok")
         }else{
             console.log("no ok")
@@ -44,6 +51,12 @@
         } 
         else{
             console.log("no ok")
+
+        }
+        if (typeof 1 == typeof "1"){
+            console.log("ok")
+        }else{
+            console.log("no ok ")
 
         }
     </script>
