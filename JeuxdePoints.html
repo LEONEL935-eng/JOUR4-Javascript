@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Points Amélioré</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        #score {
+            font-size: 28px;
+            margin: 20px;
+            color: #4CAF50;
+        }
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ddd;
+        }
+        #gainPoints {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #acheterAmelioration {
+            background-color: #008CBA;
+            color: white;
+        }
+        #amelioration {
+            margin-top: 20px;
+        }
+        .notification {
+            display: none;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            background-color: #dff0d8;
+            color: #3c763d;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gagne des Points !</h1>
+    <div id="score">Score: 0</div>
+    <button id="gainPoints">Clique ici pour gagner des points</button>
+    <div id="amelioration"></div>
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let score = 0;
+        let pointsParClic = 1;
+
+        document.getElementById('gainPoints').onclick = function() {
+            score += pointsParClic;
+            document.getElementById('score').innerText = 'Score: ' + score;
+            updateAmelioration();
+        };
+
+        function updateAmelioration() {
+            if (score >= 250) {
+                if (!document.getElementById('acheterAmelioration')) {
+                    document.getElementById('amelioration').innerHTML = '<button id="acheterAmelioration">Acheter amélioration (250 points)</button>';
+                    document.getElementById('acheterAmelioration').onclick = function() {
+                        score -= 250;
+                        pointsParClic += 1; // Augmente les points par clic
+                        document.getElementById('score').innerText = 'Score: ' + score;
+                        showNotification("Amélioration achetée ! Vous gagnez maintenant " + pointsParClic + " points par clic.");
+                        updateAmelioration();
+                    };
+                }
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.innerText = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
