@@ -6,44 +6,154 @@
     <title>Typing Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
             margin-top: 50px;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         #letter {
-            font-size: 48px;
+            font-size: 72px;
             margin: 20px;
+            padding: 20px;
+            border: 3px solid #2980b9;
+            display: inline-block;
+            background-color: #ecf0f1;
+            border-radius: 15px;
+            transition: transform 0.2s;
         }
 
-        #score {
-            font-size: 24px;
+        #letter:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #score, #timer {
+            font-size: 28px;
+            margin: 20px;
+            font-weight: bold;
+        }
+
+        #startButton, #restartButton {
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+        }
+
+        #startButton:hover, #restartButton:hover {
+            background-color: #3498db;
+        }
+
+        #instructions {
+            margin: 20px;
+            font-size: 20px;
+            color: #34495e;
+        }
+
+        @media (max-width: 600px) {
+            #letter {
+                font-size: 48px;
+            }
+
+            #score, #timer {
+                font-size: 22px;
+            }
+
+            #startButton, #restartButton {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
 <body>
     <h1>Typing Game - Niveau Facile</h1>
+    <div id="instructions">Appuyez sur la barre d'espace pour commencer. Tapez la lettre affichée.</div>
     <div id="letter"></div>
     <div id="score">Score : 0</div>
+    <div id="timer">Temps : 30</div>
+    <button id="startButton">Démarrer le Jeu</button>
+    <button id="restartButton" style="display:none;">Recommencer</button>
+    
     <script>
         let score = 0;
+        let timeLeft = 30;
+        let gameActive = false;
         const letterDisplay = document.getElementById('letter');
         const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         function generateRandomLetter() {
             return letters[Math.floor(Math.random() * letters.length)];
         }
 
+        function startGame() {
+            score = 0;
+            timeLeft = 30;
+            gameActive = true;
+            scoreDisplay.textContent = "Score : " + score;
+            timerDisplay.textContent = "Temps : " + timeLeft;
+            letterDisplay.textContent = generateRandomLetter();
+            document.getElementById('startButton').style.display = 'none';
+            document.getElementById('restartButton').style.display = 'none';
+            countdown();
+        }
+
+        function countdown() {
+            const interval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    gameActive = false;
+                    alert("Temps écoulé ! Votre score final est : " + score);
+                    document.getElementById('restartButton').style.display = 'inline';
+                } else {
+                    timeLeft--;
+                    timerDisplay.textContent = "Temps : " + timeLeft;
+                }
+            }, 1000);
+        }
+
+        function restartGame() {
+            score = 0;
+            timeLeft = 30;
+            scoreDisplay.textContent = "Score : " + score;
+            timerDisplay.textContent = "Temps : " + timeLeft;
+            letterDisplay.textContent = '';
+            gameActive = false;
+            document.getElementById('startButton').style.display = 'inline';
+            document.getElementById('restartButton').style.display = 'none';
+        }
+
+        document.getElementById('startButton').addEventListener('click', startGame);
+        document.getElementById('restartButton').addEventListener('click', restartGame);
+
         document.addEventListener('keydown', (event) => {
-            if (event.code === 'Space') {
+            if (!gameActive) return;
+
+            if (event.key === ' ') {
                 letterDisplay.textContent = generateRandomLetter();
             }
 
             if (event.key.toUpperCase() === letterDisplay.textContent) {
                 score++;
-                scoreDisplay.textContent = "score :" + score;
+                scoreDisplay.textContent = "Score : " + score;
                 letterDisplay.textContent = generateRandomLetter();
+            } else {
+                score--; // Pénalité de points pour une lettre incorrecte
+                scoreDisplay.textContent = "Score : " + score;
             }
         });
     </script>
